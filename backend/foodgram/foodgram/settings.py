@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(dotenv_path=BASE_DIR.parent.parent / 'infra' / '.env')
 SECRET_KEY = os.environ.get('SECRET_KEY', default='my_secret_Key')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     '158.160.26.12',

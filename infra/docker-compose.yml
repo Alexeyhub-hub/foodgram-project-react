@@ -5,11 +5,13 @@ services:
     image: postgres:13-alpine
     volumes:
       - db_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
     env_file:
       - ./.env
 
   backend:
-    image: agakimov/foodgram_backend:v1
+    image: agakimov/foodgram-backend:v1
     restart: always
     volumes:
       - static_value:/app/static/
@@ -20,7 +22,7 @@ services:
       - ./.env
 
   frontend:
-    image: agakimov/foodgram_frontend:v1
+    image: agakimov/foodgram-frontend:v1
     volumes:
       - ../result_build/:/app/result_build/
     depends_on:
