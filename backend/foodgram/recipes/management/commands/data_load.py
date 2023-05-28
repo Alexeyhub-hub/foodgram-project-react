@@ -1,9 +1,7 @@
 from csv import DictReader
 
 from django.core.management import BaseCommand, CommandError
-
 from recipes.models import Ingredient
-
 
 TABLES_DICT = {
     Ingredient: ('ingredients.csv', ['name', 'measurement_unit']),
@@ -24,6 +22,8 @@ class Command(BaseCommand):
                 reader = DictReader(csv_file)
                 data = []
                 for row in reader:
-                    data.append(model(**dict(zip(parameters[1], row.values()))))
+                    data.append(model(
+                        **dict(zip(parameters[1], row.values()))
+                    ))
                 model.objects.bulk_create(data)
         self.stdout.write(self.style.SUCCESS('Successfully load data'))

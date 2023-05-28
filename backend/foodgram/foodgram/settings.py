@@ -1,6 +1,4 @@
 import os
-
-from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -170,4 +168,3 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-

@@ -1,15 +1,14 @@
+from api.pagination import CustomPagination
 from django.shortcuts import get_object_or_404
-from djoser.views import UserViewSet
-from rest_framework import status, serializers
+from rest_framework import serializers, status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from api.pagination import CustomPagination
 from .models import Follow, User
-from .serializers import (CustomUserSerializer, FollowSerializer,
-                          SetPasswordSerializer, CustomUserCreateSerializer)
+from .serializers import (CustomUserCreateSerializer, CustomUserSerializer,
+                          FollowSerializer, SetPasswordSerializer)
 
 
 class UserMeViewSet(ModelViewSet):
@@ -31,14 +30,19 @@ class SetPasswordViewSet(ModelViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response({'success': 'Password successfully changed'}, status=status.HTTP_201_CREATED)
+        return Response(
+            {'success': 'Password successfully changed'},
+            status=status.HTTP_201_CREATED
+        )
 
     def perform_create(self, serializer):
         current_password = serializer.validated_data.get('current_password')
         new_password = serializer.validated_data.get('new_password')
 
         if not self.request.user.check_password(current_password):
-            raise serializers.ValidationError({'current_password': 'Invalid current password'})
+            raise serializers.ValidationError(
+                {'current_password': 'Invalid current password'}
+            )
 
         self.request.user.set_password(new_password)
         self.request.user.save()
@@ -84,6 +88,7 @@ class UsersViewSet(ModelViewSet):
                 author=author)
             subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
         detail=False,
@@ -98,4 +103,3 @@ class UsersViewSet(ModelViewSet):
             many=True,
             context={'request': request})
         return self.get_paginated_response(serializer.data)
-
