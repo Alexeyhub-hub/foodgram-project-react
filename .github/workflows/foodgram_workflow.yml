@@ -67,6 +67,7 @@ jobs:
           context: ./frontend
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:v1
+  #new
   deploy:
     name: Deploying on remote server
     runs-on: ubuntu-latest
