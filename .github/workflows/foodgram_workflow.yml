@@ -103,7 +103,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
-    #new
       - name: send message
         uses: appleboy/telegram-action@master
         with:
