@@ -3,12 +3,13 @@ from django.db import transaction
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
-from users.serializers import CustomUserSerializer, RecipeShortSerializer
+
+from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
+from users.serializers import CustomUserSerializer
 
 User = get_user_model()
 
@@ -49,13 +50,12 @@ class RecipeReadSerializer(ModelSerializer):
         )
 
     def get_ingredients(self, obj):
-        ingredients = obj.ingredients.values(
+        return obj.ingredients.values(
             'id',
             'name',
             'measurement_unit',
             amount=F('ingredients_recipes__amount')
         )
-        return ingredients
 
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
@@ -169,6 +169,7 @@ class RecipeWriteSerializer(ModelSerializer):
     def to_representation(self, instance):
         request = self.context.get('request')
         context = {'request': request}
-        return RecipeReadSerializer(instance,
-                                    context=context).data
-
+        return RecipeReadSerializer(
+            instance,
+            context=context
+        ).data
