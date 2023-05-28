@@ -86,8 +86,7 @@ jobs:
             sudo docker system prune -f
             sudo systemctl stop nginx
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:v1
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:v1
-            sudo rm -f .env        
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-frontend:v1     
             sudo touch .env
             sudo echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
             sudo echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
