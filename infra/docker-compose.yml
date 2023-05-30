@@ -24,7 +24,7 @@ services:
   frontend:
     image: agakimov/foodgram-frontend:v1
     volumes:
-      - ../result_build/:/app/result_build/
+      - ../frontend/:/app/result_build/
     depends_on:
       - backend
 
