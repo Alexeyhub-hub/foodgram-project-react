@@ -40,7 +40,6 @@ services:
       - media_value:/var/html/media/
     depends_on:
       - frontend
-#new
 volumes:
   static_value:
   media_value:
