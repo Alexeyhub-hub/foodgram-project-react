@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.db.models import F
-from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from rest_framework.exceptions import ValidationError
@@ -98,15 +97,13 @@ class RecipeWriteSerializer(ModelSerializer):
         )
 
     def validate_ingredients(self, value):
-        ingredients = value
-        if not ingredients:
+        if not value:
             raise ValidationError({
                 'ingredients': 'Нужен хотя бы один ингредиент!'
             })
         ingredients_list = []
-        for item in ingredients:
-            ingredient = get_object_or_404(Ingredient, id=item['id'])
-            if ingredient in ingredients_list:
+        for item in value:
+            if item['id'] in ingredients_list:
                 raise ValidationError({
                     'ingredients': 'Ингридиенты не могут повторяться!'
                 })
@@ -114,7 +111,7 @@ class RecipeWriteSerializer(ModelSerializer):
                 raise ValidationError({
                     'amount': 'Количество ингредиента должно быть больше 0!'
                 })
-            ingredients_list.append(ingredient)
+            ingredients_list.append(item['id'])
         return value
 
     def validate_tags(self, value):
@@ -162,7 +159,6 @@ class RecipeWriteSerializer(ModelSerializer):
         instance.ingredients.clear()
         self.create_ingredients_amounts(recipe=instance,
                                         ingredients=ingredients)
-        instance.save()
         return instance
 
     def to_representation(self, instance):

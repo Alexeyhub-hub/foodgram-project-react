@@ -29,6 +29,13 @@ class SetPasswordSerializer(serializers.ModelSerializer):
         model = User
         fields = ('new_password', 'current_password',)
 
+    def validate_current_password(self, value):
+        if not User.check_password(value):
+            raise ValidationError(
+                {'current_password': 'Invalid current password'}
+            )
+        return value
+
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     password = serializers.CharField(write_only=True)

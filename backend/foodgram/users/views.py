@@ -1,6 +1,6 @@
 from api.pagination import CustomPagination
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers, status
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -23,9 +23,6 @@ class SetPasswordViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated,)
     serializer_class = SetPasswordSerializer
 
-    def get_queryset(self):
-        return User.objects.filter(id=self.request.user.id)
-
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -36,14 +33,7 @@ class SetPasswordViewSet(ModelViewSet):
         )
 
     def perform_create(self, serializer):
-        current_password = serializer.validated_data.get('current_password')
         new_password = serializer.validated_data.get('new_password')
-
-        if not self.request.user.check_password(current_password):
-            raise serializers.ValidationError(
-                {'current_password': 'Invalid current password'}
-            )
-
         self.request.user.set_password(new_password)
         self.request.user.save()
 
@@ -78,16 +68,15 @@ class UsersViewSet(ModelViewSet):
                 context={"request": request}
             )
             serializer.is_valid(raise_exception=True)
+            serializer.save()
             Follow.objects.create(user=user, author=author)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-        if request.method == 'DELETE':
-            subscription = get_object_or_404(
-                Follow,
-                user=user,
-                author=author)
-            subscription.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+        subscription = get_object_or_404(
+            Follow,
+            user=user,
+            author=author)
+        subscription.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
