@@ -2,11 +2,12 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.db.models import F
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
+
+from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from users.serializers import CustomUserSerializer
 
 User = get_user_model()
@@ -133,7 +134,7 @@ class RecipeWriteSerializer(ModelSerializer):
     def create_ingredients_amounts(self, ingredients, recipe):
         IngredientInRecipe.objects.bulk_create(
             [IngredientInRecipe(
-                ingredient=Ingredient.objects.get(id=ingredient['id']),
+                ingredient_id=ingredient['id'],
                 recipe=recipe,
                 amount=ingredient['amount']
             ) for ingredient in ingredients]
