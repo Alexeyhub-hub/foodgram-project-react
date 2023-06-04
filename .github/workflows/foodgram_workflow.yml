@@ -81,7 +81,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            sudo docker-compose down -v
+            sudo docker-compose stop
             sudo docker system prune -f
             sudo systemctl stop nginx
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram-backend:v1
