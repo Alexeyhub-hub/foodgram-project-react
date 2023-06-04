@@ -23,8 +23,11 @@ services:
 
   frontend:
     image: agakimov/foodgram-frontend:v1
+    restart: always
     volumes:
       - ../frontend/:/app/result_build/
+    depends_on:
+      - backend
 
   nginx:
     image: nginx:1.21.3-alpine
@@ -40,6 +43,6 @@ services:
       - backend
       - frontend
 volumes:
+  db_data:
   static_value:
   media_value:
-  db_data:
