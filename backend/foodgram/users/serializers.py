@@ -29,10 +29,10 @@ class SetPasswordSerializer(serializers.ModelSerializer):
         model = User
         fields = ('new_password', 'current_password',)
 
-    def validate_current_password(self, value):
+    def validate_new_password(self, value):
         if not User.check_password(value):
             raise ValidationError(
-                {'current_password': 'Invalid current password'}
+                {'new_password': 'Invalid new password'}
             )
         return value
 
@@ -44,6 +44,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         model = User
         fields = (
             'email',
+            'id',
             'username',
             'first_name',
             'last_name',
