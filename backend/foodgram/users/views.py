@@ -1,53 +1,19 @@
 from django.shortcuts import get_object_or_404
+from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
 from api.pagination import CustomPagination
 from .models import Follow, User
-from .serializers import (CustomUserCreateSerializer, CustomUserSerializer,
-                          FollowSerializer, SetPasswordSerializer)
+from .serializers import CustomUserSerializer, FollowSerializer
 
 
-class UserMeViewSet(ModelViewSet):
-    serializer_class = CustomUserSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        return User.objects.filter(id=self.request.user.id)
-
-
-class SetPasswordViewSet(ModelViewSet):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = SetPasswordSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response(
-            {'success': 'Password successfully changed'},
-            status=status.HTTP_201_CREATED
-        )
-
-    def perform_create(self, serializer):
-        new_password = serializer.validated_data.get('new_password')
-        self.request.user.set_password(new_password)
-        self.request.user.save()
-
-
-class UsersViewSet(ModelViewSet):
+class UsersViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [AllowAny, ]
     pagination_class = CustomPagination
-
-    def get_serializer_class(self):
-        if self.action in ['list', 'retrieve']:
-            return self.serializer_class
-        return CustomUserCreateSerializer
 
     @action(
         detail=True,
