@@ -16,7 +16,7 @@ class Command(BaseCommand):
             if model.objects.exists():
                 raise CommandError('Data exists in database!')
             with open(
-                    f'../../data/{parameters[0]}',
+                    f'./{parameters[0]}',
                     encoding='utf-8'
             ) as csv_file:
                 reader = DictReader(csv_file)
