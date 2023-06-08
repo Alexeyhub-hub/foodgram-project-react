@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(dotenv_path=BASE_DIR.parent.parent / 'infra' / '.env')
 SECRET_KEY = os.environ.get('SECRET_KEY', default='my_secret_Key')
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '84.201.162.151',
@@ -117,7 +117,7 @@ DATABASES = {
         'NAME': os.environ.get('DB_NAME', default='postgres'),
         'USER': os.environ.get('POSTGRES_USER', default='postgres'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD', default='my_password'),
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
+        'HOST': os.environ.get('DB_HOST', default='db'),
         'PORT': os.environ.get('DB_PORT', '5432')
     }
 }

@@ -30,7 +30,8 @@ class SetPasswordSerializer(serializers.ModelSerializer):
         fields = ('new_password', 'current_password',)
 
     def validate_new_password(self, value):
-        if not User.check_password(value):
+        user = self.context['request'].user
+        if not user.check_password(value):
             raise ValidationError(
                 {'new_password': 'Invalid new password'}
             )

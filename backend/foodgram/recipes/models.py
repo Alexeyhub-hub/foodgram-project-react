@@ -103,7 +103,7 @@ class Recipe(CreatedModel):
 class TagRecipe(CreatedModel):
     tag = models.ForeignKey(
         Tag, on_delete=models.CASCADE,
-        related_name='tags',
+        related_name='tag_recipes',
         verbose_name='Тег',
     )
     recipe = models.ForeignKey(
