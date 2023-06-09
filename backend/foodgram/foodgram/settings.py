@@ -10,7 +10,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='my_secret_Key')
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '84.201.162.151',
+    '158.160.4.113',
     'localhost',
     '127.0.0.1',
     'backend'
