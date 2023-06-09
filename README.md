@@ -4,9 +4,9 @@
 
 Foodgram - продуктовый помощник с базой кулинарных рецептов. Позволяет публиковать рецепты, сохранять избранные, а также формировать список покупок для выбранных рецептов. Можно подписываться на любимых авторов.
 
-Проект доступен по [адресу](https://foodgramproject.ru)
+Проект доступен по [адресу](https://158.160.4.113)
 
-Документация к API доступна [здесь](https://foodgramproject.ru/api/docs/)
+Документация к API доступна [здесь](https://158.160.4.113/api/docs/)
 
 В документации описаны возможные запросы к API и структура ожидаемых ответов. Для каждого запроса указаны уровни прав доступа.
 
@@ -78,9 +78,9 @@ sudo docker compose exec backend python manage.py createsuperuser
 sudo docker compose exec backend python manage.py collectstatic --noinput
 ```
 
-- Наполнить базу данных содержимым из файла ingredients.json:
+- Наполнить базу данных содержимым из файла ingredients.csv:
 ```
-sudo docker compose exec backend python manage.py loaddata ingredients.json
+sudo docker compose exec backend python manage.py data_load
 ```
 
 - Для остановки контейнеров Docker:
@@ -100,7 +100,7 @@ sudo docker compose stop         # без удаления
 
 - Клонировать репозиторий:
 ```
-https://github.com/mikhailsoldatkin/foodgram-project-react.git
+https://github.com/Alexeyhub-hub/foodgram-project-react.git
 ```
 
 - В директории infra файл example.env переименовать в .env и заполнить своими данными:
@@ -114,11 +114,6 @@ DB_PORT=5432
 SECRET_KEY='секретный ключ Django'
 ```
 
-- Создать и запустить контейнеры Docker, последовательно выполнить команды по созданию миграций, сбору статики, 
-созданию суперпользователя, как указано выше.
-```
-docker-compose -f docker-compose-local.yml up -d
-```
 
 
 - После запуска проект будут доступен по адресу: [http://localhost/](http://localhost/)
