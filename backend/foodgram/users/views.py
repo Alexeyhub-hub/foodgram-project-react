@@ -25,7 +25,7 @@ class UsersViewSet(UserViewSet):
         user = request.user
         author = get_object_or_404(
             User,
-            id=self.kwargs.get('pk')
+            id=self.kwargs.get('id')
         )
         if request.method == 'POST':
             serializer = FollowSerializer(
@@ -33,8 +33,8 @@ class UsersViewSet(UserViewSet):
                 data=request.data,
                 context={"request": request}
             )
+            print(serializer)
             serializer.is_valid(raise_exception=True)
-            serializer.save()
             Follow.objects.create(user=user, author=author)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
